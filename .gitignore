@@ -6,13 +6,11 @@ __pycache__/
 */migrations/*
 **/migrations/*
 */logs/*
-config/*
 */db/*
 staticfiles/*
 db.sqlite3
 pegasus.sqlite3
 db/pegasus.sqlite3
-media
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
@@ -142,8 +140,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
 parts/
 sdist/
 var/
