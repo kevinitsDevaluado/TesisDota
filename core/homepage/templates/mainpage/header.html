@@ -1,0 +1,26 @@
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center">
+        <a href="{% url 'index' %}" class="logo mr-auto"><img src="{{ mainpage.get_icon_image }}" alt=""
+                                                              class="img-fluid" width="140px"></a>
+        <nav class="nav-menu d-none d-lg-block">
+            <ul>
+                <li class="active"><a href="{% url 'index' %}">Inicio</a></li>
+                <li><a href="{% if onepage %}#about{% else %}/#about{% endif %}">Nosotros</a></li>
+                <li><a href="{% if onepage %}#services{% else %}/#services{% endif %}">Servicios</a></li>
+                <li><a href="{% if onepage %}#departments{% else %}/#departments{% endif %}">Departamentos</a></li>
+
+                <li><a href="{% if onepage %}#doctors{% else %}/#doctors{% endif %}">Docentes</a></li>
+                <li><a href="{% if onepage %}#contact{% else %}/#contact{% endif %}">Contactos</a></li>
+                <li>
+                    {% if request.user.is_superuser %}
+                        <a href="{% url 'dashboard' %}">Bienvenido {{ request.user.get_short_name }}</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Iniciar sesión</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<!-- End Header -->

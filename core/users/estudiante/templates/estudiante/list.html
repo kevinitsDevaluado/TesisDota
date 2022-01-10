@@ -1,0 +1,25 @@
+{% extends 'list.html' %}
+
+{% block columns %}
+    <th>Nro</th>
+    <th>Estudiante</th>
+    <th>Correo Electrónico Estudiante</th>
+    <th>Representante</th>
+    <th>Correo Electrónico Representante</th>
+    <th class="text-center">Opciones</th>
+{% endblock %}
+
+{% block rows %}
+    {% for i in object_list %}
+        <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.user.last_name }} {{ i.user.first_name }}</td>
+            <td>{{ i.user.email }}</td>
+            <td>{{ i.representante.last_name }} {{ i.representante.first_name }}</td>
+            <td>{{ i.representante.email }}</td>
+            <td>{{ i.user.id }}</td>
+
+        </tr>
+    {% endfor %}
+{% endblock %}
+

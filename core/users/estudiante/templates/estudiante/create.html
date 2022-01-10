@@ -1,0 +1,122 @@
+
+{% extends 'list.html' %}
+{% load widget_tweaks %}
+{% load security_extras %}
+{% load static %}
+{% block head_list %}
+    <!--Formvalidation Libs-->
+    <link rel="stylesheet" href="{% static 'lib/formvalidation-1.8.0/css/formValidation.min.css' %}">
+    <script src="{% static 'lib/formvalidation-1.8.0/js/es6-shim.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.8.0/js/FormValidation.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.8.0/js/plugins/Bootstrap.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.8.0/js/locales/es_ES.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+    <script src="{% static 'user_estudiante/js/form.js' %}"></script>
+
+    <!--Block head form-->
+    {% block head_form %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<form class="form" method="post" action="." enctype="multipart/form-data" id="frmForm"
+data-url="{{ list_url }}">
+    <div class="card {{ dshboard.card }}">
+        <div class="card-header">
+            <h3 class="card-title">
+                {% if action == 'add' %}
+                    <i class="fas fa-plus" aria-hidden="true"></i>
+                {% else %}
+                    <i class="fas fa-edit" aria-hidden="true"></i>
+                {% endif %}
+                Creación de un Estudiante en el Sistema
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card {{ dshboard.card }}">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                {% if action == 'add' %}
+                                    <i class="fas fa-plus" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fas fa-edit" aria-hidden="true"></i>
+                                {% endif %}
+                                Datos del Estudiante
+                            </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                          <div class="card-body">
+                            <input type="hidden" name="action" id="action" value="{{ action }}">
+                                {% csrf_token %}
+                                {# Forms Visible #}
+                                {% for field in form.visible_fields %}
+                                    <div class="form-group">
+                                        <label>{{ field.label }}:</label>
+                                        {% if field|is_checkbox %}
+                                            {{ field }}
+                                        {% else %}
+                                            {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                          </div>
+                          <!-- /.card-body -->
+                      </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card {{ dshboard.card }}">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                {% if action == 'add' %}
+                                    <i class="fas fa-plus" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fas fa-edit" aria-hidden="true"></i>
+                                {% endif %}
+                                Datos del Representante
+                            </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Nombres:</label>
+                                        <input type="text" name="first_name_repre" placeholder="Ingrese sus nombres" maxlength="30" autofocus="" autocomplete="off" class="form-control" id="id_first_name_repre">
+                                </div>
+                                <div class="form-group">
+                                    <label>Apellidos:</label>
+                                    <input type="text" name="last_name_repre" placeholder="Ingrese sus apellidos" maxlength="150" autocomplete="off" class="form-control" id="id_last_name_repre">
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label>Cédula: </label>
+                                        <input type="text" name="dni_repre" placeholder="Ingrese su número de cedula" maxlength="13" autocomplete="off" class="form-control" required="" id="id_dni_repre">
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label>Dirección de correo electrónico:</label>
+                                    <input type="text" name="email_repre" placeholder="Ingrese su correo electrónico" maxlength="254" autocomplete="off" class="form-control" id="id_email_repre">                        
+                                </div>                        
+                            </div>
+                          
+                      </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary btn-flat">
+                <i class="fas fa-save" aria-hidden="true"></i> Guardar registro
+            </button>
+            <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+    
+</div>
+</form>
+
+{% endblock %}

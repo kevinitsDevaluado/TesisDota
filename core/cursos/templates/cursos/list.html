@@ -1,0 +1,49 @@
+{% extends 'list.html' %} {% block columns %}
+<th>Nro</th>
+<th>Profesor</th>
+<th>Nivel</th>
+<th>Sección</th>
+<th>Asignatura</th>
+<th class="text-center">Opciones</th>
+{% endblock %} {% block rows %} {% for i in object_list %}
+<tr>
+  <td>{{ i.id }}</td>
+  <td>{{ i.profesor.last_name }} {{ i.profesor.first_name }}</td>
+  <td>{{ i.nivel }}</td>
+  <td>{{ i.seccion }}</td>
+  <td>{{ i.asignatura }}</td>
+  <td>
+    <div class="dropdown text-center">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu2"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Opciones
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <a
+          href="{% url 'cursos_update' i.id %}"
+          data-toggle="tooltip"
+          title="Editar registro"
+          class="dropdown-item"
+        >
+          <i class="fas fa-edit"> Editar</i>
+        </a>
+
+        <a
+          href="{% url 'verCurso' i.id %}"
+          data-toggle="tooltip"
+          title="Matriculas"
+          class="dropdown-item"
+        >
+          <i class="fa fa-address-book"> Ver Curso</i>
+        </a>
+      </div>
+    </div>
+  </td>
+</tr>
+{% endfor %} {% endblock %}
