@@ -1,8 +1,8 @@
-var fv;
+var fvPost;
 
 document.addEventListener('DOMContentLoaded', function (event) {
     const form = document.getElementById('frmMessage');
-    fv = FormValidation.formValidation(form, {
+    fvPost = FormValidation.formValidation(form, {
             locale: 'es_ES',
             localization: FormValidation.locales.es_ES,
             plugins: {
@@ -17,16 +17,17 @@ document.addEventListener('DOMContentLoaded', function (event) {
                 }),
             },
             fields: {
-                
                 publicacion: {
                     validators: {
                         notEmpty: {
-                            message: 'El campo no puede estar en blanco..'
+                            message: 'Debe llenar el campo para publicar..'
                         },
-                        
                     }
                 },
+                
+                
             }
+            
         }
     )
         .on('core.element.validated', function (e) {
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
                     'is-valid': false,
                 });
             }
-            const iconPlugin = fv.getPlugin('icon');
+            const iconPlugin = fvPost.getPlugin('icon');
             const iconElement = iconPlugin && iconPlugin.icons.has(e.element) ? iconPlugin.icons.get(e.element) : null;
             iconElement && (iconElement.style.display = 'none');
         })
@@ -55,9 +56,9 @@ document.addEventListener('DOMContentLoaded', function (event) {
             }
         })
         .on('core.form.valid', function () {
-            var parameters = new FormData(fv.form);
+            var parameters = new FormData(fvPost.form);
             parameters.append('action', 'post_add');
-            let urlrefresh = fv.form.getAttribute('data-url');
+            let urlrefresh = fvPost.form.getAttribute('data-url');
             submit_formdata_with_ajax('Notificación',
                 '¿Estas seguro de realizar la siguiente acción?',
                 pathname,
@@ -70,11 +71,10 @@ document.addEventListener('DOMContentLoaded', function (event) {
             );
         });
 });
-    
+
 $(function () {
-
-    $('select[name="post"]').on('change', function (e) {
-        fv.revalidateField('post');
+    $('input[name="publicacion"]').keypress(function (e) {
+        return validate_form_text('letters', e, null);
     });
-
+    
 });

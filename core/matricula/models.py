@@ -24,10 +24,6 @@ class Matricula(models.Model):
 
     def toJSON(self):
         item = model_to_dict(self)
-        item['estudiante'] = self.estudiante.toJSON()
-        item['curso'] = self.curso.toJSON()
-        item['profesor'] = self.profesor.toJSON()
-
         return item
 
     class Meta:

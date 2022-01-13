@@ -1,9 +1,8 @@
-var fv;
+var fvMatricula;
 
 document.addEventListener('DOMContentLoaded', function (event) {
     const form = document.getElementById('frmForm');
-    const submitButton = form.querySelector('[type="submit"]');
-    fv = FormValidation.formValidation(form, {
+    fvMatricula = FormValidation.formValidation(form, {
             locale: 'es_ES',
             localization: FormValidation.locales.es_ES,
             plugins: {
@@ -18,23 +17,23 @@ document.addEventListener('DOMContentLoaded', function (event) {
                 }),
             },
             fields: {
-                
                 estudiante: {
                     validators: {
                         notEmpty: {
-                            message: 'Seleccione un Estudiante a Matricular'
+                            message: 'Debe elegir al menos un estudiante..'
                         },
+                        
                         remote: {
                             url: pathname,
-                            // Send { username: 'its value', email: 'its value' } to the back-end
                             data: function () {
                                 return {
+                                
                                     obj: form.querySelector('[name="estudiante"]').value,
                                     type: 'estudiante',
                                     action: 'validate_data'
                                 };
                             },
-                            message: 'El estudiante ya se encuentra Matriculado en este curso.',
+                            message: 'El estudiante ya se encuentra matriculado en este curso',
                             method: 'POST',
                             headers: {
                                 'X-CSRFToken': csrftoken
@@ -42,7 +41,10 @@ document.addEventListener('DOMContentLoaded', function (event) {
                         }
                     }
                 },
+                
+                
             }
+            
         }
     )
         .on('core.element.validated', function (e) {
@@ -57,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
                     'is-valid': false,
                 });
             }
-            const iconPlugin = fv.getPlugin('icon');
+            const iconPlugin = fvMatricula.getPlugin('icon');
             const iconElement = iconPlugin && iconPlugin.icons.has(e.element) ? iconPlugin.icons.get(e.element) : null;
             iconElement && (iconElement.style.display = 'none');
         })
@@ -71,20 +73,28 @@ document.addEventListener('DOMContentLoaded', function (event) {
             }
         })
         .on('core.form.valid', function () {
-            submit_formdata_with_ajax_form(fv);
+            var parameters = new FormData(fvMatricula.form);
+            parameters.append('action', 'add');
+            let urlrefresh = fvMatricula.form.getAttribute('data-url');
+            submit_formdata_with_ajax('Notificación',
+                '¿Estas seguro de realizar la siguiente acción?',
+                pathname,
+                parameters,
+                function (request) {
+                    
+                    location.href = urlrefresh;
+
+                },
+            );
         });
 });
 
 $(function () {
 
-    $('.select2').select2({
-        placeholder: 'Buscar..',
-        language: 'es',
-        theme: 'bootstrap4'
-    });
+    
 
     $('select[name="estudiante"]').on('change', function (e) {
-        fv.revalidateField('estudiante');
+        fvMatricula.revalidateField('estudiante');
     });
-
+    
 });

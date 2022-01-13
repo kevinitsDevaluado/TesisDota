@@ -12,7 +12,7 @@ class MatriculaForm(ModelForm):
         model = Matricula
         fields = 'estudiante','observacion'
         widgets = {
-            'estudiante': forms.Select(attrs={'class': 'select2' ,'style': 'width:100%'}),
+            'estudiante': forms.Select(attrs={'class': 'form-control' ,'style': 'width:100%'}),
             'observacion': forms.Textarea(attrs={'placeholder': 'Ingrese una observacion','class': 'form-control',}),
         }
         exclude = ['deletes']
@@ -21,7 +21,6 @@ class PostForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         #self.fields['estudiante'].widget.attrs['autofocus'] = True
-
     class Meta:
         model = Post
         fields = 'publicacion',
