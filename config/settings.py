@@ -53,6 +53,8 @@ LOCAL_APPS = [
     'core.users.estudiante',
     'core.users.representate',
     'core.matricula',
+    'core.juegos',
+    'core.deberes',
 
 ]
 

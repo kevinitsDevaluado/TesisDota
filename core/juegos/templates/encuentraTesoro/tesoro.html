@@ -1,0 +1,80 @@
+{% extends 'mainpage/index.html' %}
+
+{% load static %}
+{% block head_body %}
+    
+    <!--Block head list-->
+    {% block head_list %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+    <div class="card {{ dshboard.card }}">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-search"></i>
+                {{ title }}
+            </h3>
+            <div class="card-tools">
+                <small>Su último acceso al sistema fue el {{ request.user.last_login }}</small>
+            </div>
+        </div>
+        <div class="card-body" style="display: block;">
+            <div class="container-fluid">
+                <!--Block content list-->
+                {% block content_list %}
+                    <!--Block content list before-->
+                    {% block content_list_before %}
+                        <br>
+                    {% endblock %}
+                    <!--Table-->      
+                    <div class="container">
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="card">
+                              <div class="card-body text-center">
+                                <style>
+                    
+                                  .img1 {
+                                    -webkit-user-select: none;
+                                    -khtml-user-select: none;
+                                    -moz-user-select: none;
+                                    -o-user-select: none;
+                                    user-select: none;
+                                  }
+                    
+                                  .p1 {
+                                    display: block;
+                                  }
+                    
+                                </style>
+                                <img src="{% static 'encuentraTesoro/img/treasuremap.png' %}" class="img1 img-fluid" width="400" height="400" id="map" draggable="false">
+                    
+                                <p id="distance" class="p1"></p>
+                    
+                                <script src="{% static 'encuentraTesoro/js/helper.js' %}" charset="utf-8"></script>
+                                <script src="{% static 'encuentraTesoro/js/game.js' %}" charset="utf-8"></script>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    
+                      </div>
+                {% endblock %}
+            </div>
+        </div>
+        <!--Block box footer-->
+        {% block box_footer %}
+           
+        {% endblock %}
+        <!--Block box footer after-->
+        {% block box_footer_after %}{% endblock %}
+    </div>
+    {% block javascript_list %}
+        <script type="application/javascript">
+           
+        </script>
+    {% endblock %}
+{% include 'mainpage/footer.html' %}
+
+{% endblock %}
+

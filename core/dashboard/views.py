@@ -7,10 +7,12 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import TemplateView
+from core.user.models import User
 
 from core.homepage.models import *
 from core.security.models import Dashboard
 from core.user.models import User
+from core.security.models import *
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -23,6 +25,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         if dashboard.exists():
             context['videos'] = Videos.objects.filter(state=True)
             context['news'] = News.objects.filter(state=True)
+            
+            print()
             return render(request, 'vtcpanel.html', context)
         return render(request, 'hztpanel.html', context)
 

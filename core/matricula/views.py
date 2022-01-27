@@ -35,6 +35,9 @@ class VerCursoListView(CreateView):
                 if type == 'estudiante':
                     if Matricula.objects.filter(estudiante_id=obj,curso_id=pk):
                         data['valid'] = False
+                elif type == 'name':
+                    if CrearTarea.objects.filter(name__icontains=obj,curso_id=pk):
+                        data['valid'] = False
             except:
                 pass
             return JsonResponse(data)
@@ -57,7 +60,6 @@ class VerCursoListView(CreateView):
                     e.profesor_id = request.user.id
                     e.observacion = observacion
                     e.save()    
-
             elif action == 'post_add':
                 with transaction.atomic():
                     print('Accion Agregar Foro',action)
@@ -69,7 +71,6 @@ class VerCursoListView(CreateView):
                     pb.curso_id = curso_id
                     pb.user_id = request.user.id
                     pb.save()
-
             elif action == 'add_list':
                 with transaction.atomic():
                     check = request.POST.getlist('checks[]')                    
@@ -79,6 +80,42 @@ class VerCursoListView(CreateView):
                         lista.curso_id = self.kwargs['pk']
                         lista.asistencia = False
                         lista.save()
+            elif action == 'add_homework':
+                with transaction.atomic():
+                    id_curso = self.kwargs['pk']
+                    estudiants = Matricula.objects.filter(curso=id_curso)
+                    tema = request.POST['name']
+                    #print('tema: ',tema)
+                    juego = request.POST['juego']
+                    #print('juego: ',juego)
+                    descripcion = request.POST['descripcion']
+                    #print('descripcion: ', descripcion)
+                    crear = CrearTarea()
+                    crear.name = tema
+                    crear.curso_id = id_curso
+                    crear.juego_id = juego
+                    crear.descripcion = descripcion
+                    crear.save()
+                    tareaActual = CrearTarea.objects.get(name__icontains = tema)
+                    #print('Tarea Actual: ',tareaActual.id)
+                    if tareaActual :               
+                        for i in estudiants:
+                            print('Tarea Actual: ', tareaActual.id)
+                            print('estudiante: ', i.estudiante_id)
+                            entregar = EntregarTarea()
+                            entregar.tarea_id = tareaActual.id
+                            entregar.estudiante_id = i.estudiante_id
+                            entregar.save()
+            elif action == 'update_nota':
+                with transaction.atomic():
+                    nota = request.POST['nota']
+                    print('id tarea: ',nota)
+                    tarea = request.POST['id_tarea']
+                    print('id tarea', tarea)
+                    km = EntregarTarea.objects.get(tarea = tarea)
+                    km.nota = nota
+                    km.save()
+                                                        
             elif action == 'validate_data':
                 return self.validate_data()
             else:
@@ -95,6 +132,10 @@ class VerCursoListView(CreateView):
         curso = Cursos.objects.get(id=id_curso)
         info = Mainpage.objects.get(id=1)
         matriculados = Matricula.objects.filter(curso=id_curso)
+        asistencias = ListaEstudiantes.objects.filter(curso=id_curso)
+        tareas = EntregarTarea.objects.filter(tarea__curso=id_curso)
+        tareasIndividual = EntregarTarea.objects.filter(tarea__curso=id_curso, estudiante__user__id = self.request.user.id)
+
         #SELECT *FROM MATRICULA where id_curso = 1;
         #matriculados = Matricula.objects.filter(curso=id_curso)
 
@@ -111,10 +152,18 @@ class VerCursoListView(CreateView):
         context['post'] = Post.objects.filter(curso=id_curso)
         context['formPost'] = PostForm()
         context['form'] = MatriculaForm()
+        context['asistencias'] = asistencias
         context['matricula'] = matriculados
         context['formAsistencia'] = AsistenciaForm
         context['cursos'] =  id_curso
         context['count'] = count
+        context['formCrearTarea'] = CrearTareaForm()
+        context['tareas'] = tareas
+        context['tareasIndividual'] = tareasIndividual
+
+        context['tareaForm'] = TareaForm()
+
+        
         return context
 
 
@@ -134,3 +183,6 @@ class MatriculaListView(PermissionMixin, ListView):
         context['title'] = 'Listado de Matriculas'
         context['object_list'] = matriculados
         return context
+
+
+

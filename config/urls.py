@@ -29,6 +29,7 @@ urlpatterns = [
     path('cursos/', include('core.cursos.urls')),
     path('estudiante/', include('core.users.estudiante.urls')),
     path('matricula/', include('core.matricula.urls')),
+    path('juegos/', include('core.juegos.urls')),
     
 
 ]

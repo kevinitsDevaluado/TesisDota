@@ -1,4 +1,6 @@
 {% extends 'skin.html' %}
+{% load widget_tweaks %}
+
 {% load static %}
 
 {% block head_body %}
@@ -8,6 +10,7 @@
     <script src="{% static 'lib/formvalidation-1.8.0/js/FormValidation.min.js' %}"></script>
     <script src="{% static 'lib/formvalidation-1.8.0/js/plugins/Bootstrap.min.js' %}"></script>
     <script src="{% static 'lib/formvalidation-1.8.0/js/locales/es_ES.min.js' %}"></script>
+    
     <link rel="stylesheet" href="{% static 'lib/datatables-1.10.25/css/dataTables.bootstrap4.min.css' %}"/>
     <link rel="stylesheet" href="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/css/responsive.bootstrap4.min.css' %}"/>
 {#    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/css/jquery.dataTables.min.css' %}"/>#}
@@ -16,7 +19,7 @@
     <script src="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/js/dataTables.responsive.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/js/responsive.bootstrap4.min.js' %}"></script>
     
-
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
     <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
     <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
     <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
@@ -24,6 +27,10 @@
     <script src="{% static 'matricula/js/form.js' %}"></script>
     <script src="{% static 'matricula/js/post.js' %}"></script>
     <script src="{% static 'matricula/js/asistencia.js' %}"></script>
+    <script src="{% static 'matricula/js/crearTarea.js' %}"></script>
+    <script src="{% static 'matricula/js/updateNota.js' %}"></script>
+
+
 
 
 
@@ -160,9 +167,14 @@
                                     <li class="nav-item"><a class="nav-link " href="#activity" data-toggle="tab">Matrículas</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Alumnos</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Asistencia</a></li>
-
+                                    <li class="nav-item"><a class="nav-link" href="#verAsistencia" data-toggle="tab">Ver Asistencia</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#deberes" data-toggle="tab"> Crear Deberes</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#verDeberes" data-toggle="tab">Notas</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#veReportes" data-toggle="tab">Ver Reportes</a></li>                                    
                                     {% endif %}
-                                    <li class="nav-item"><a class="nav-link" href="#deberes" data-toggle="tab">Deberes</a></li>
+                                    {% if request.session.group.name == 'Estudiante'%}
+                                    <li class="nav-item"><a class="nav-link" href="#veReportesIndividuales" data-toggle="tab">Ver Reportes Individuales</a></li>
+                                    {% endif %}
                                   
                                   </ul>
                                 </div><!-- /.card-header -->
@@ -231,7 +243,6 @@
                                           data-url="{{ list_url }}">
 
                                           {% csrf_token %}
-                                          <input type="hidden" name="action" id="action" value="{{ action }}">
 
                                             <div class="card-header">
                                               <h3 class="card-title"> {{titulo}} </h3>
@@ -356,8 +367,57 @@
                                     </div>
                                     {% endif %}
                                     <!-- END ASISTENCIAS -->
+                                    
 
-                                    <!-- DEBERES -->
+                                     <!-- VER ASISTENCIAS -->
+                                     {% if request.session.group.name != 'Estudiante'%}
+                                    
+                                     <div class="tab-pane" id="verAsistencia">
+                                       <div class="card card-info">
+                                         <form class="form" method="post" enctype="multipart/form-data" id="frmAsistencia"
+                                     data-url="{{ list_url }}">
+ 
+                                         <div class="card-header">
+                                           <h3 class="card-title"> Asistencias </h3>
+                                         </div>
+                                         <div class="card-body" style="display: block;">
+                                            <div class="container-fluid">
+                                              <table class="table table-bordered table-striped" id="data" width="100%">
+                                                <thead class="thead-info">
+                                                  <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Nombre</th>
+                                                    <th scope="col">Apellido</th>
+                                                    <th scope="col" class="text-center">Asistencia</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {% for l in asistencias %}
+                                                  <tr>
+                                                    
+                                                    <th scope="row"> {{ forloop.counter }} </th>
+                                                    <td> {{ l.estudiant.user.first_name }} </td>
+                                                    <td>{{ l.estudiant.user.last_name }}</td>
+                                                    <td class="text-center">
+                                                     {{ l.creada_en | date:"M/d"|lower }}
+                                                    </td>
+                                                  </tr>
+                                                  {% endfor %}
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                         </div>
+                                         <div class="card-footer">
+                                           
+                                         </div>
+                                          </form>
+ 
+                                       </div>
+                                     </div>
+                                     {% endif %}
+                                     <!-- END VER ASISTENCIAS -->
+
+                                    <!-- CREAR DEBERES -->
                                     {% if request.session.group.name != 'Estudiante'%}
                                     
                                     <div class="tab-pane" id="deberes">
@@ -368,61 +428,26 @@
                                           <h3 class="card-title"> Deberes </h3>
                                         </div>
                                         <div class="card-body">
-                                          <div class="row">
-                                              <!-- ADIVINANZA -->
-                                            <div class="col-lg-3 col-6">
-                                              <!-- small box -->
-                                              <div class="small-box bg-info">
-                                                <div class="inner">
-                                                  <h3>Juego</h3>
-                                                  <p>Adivinanza</p>
+                                          <form class="form" method="post" enctype="multipart/form-data" id="frmCrearTarea"
+                                              data-url="{{ list_url }}">
+
+                                              {% csrf_token %}
+                                              <div class="row">
+                                                {% for field in formCrearTarea.visible_fields %}
+                                    
+                                                <div class="col-md-12">
+                                                  
+                                                  <div class="form-group">
+                                                          {{ field }}
+                                                      </div>
                                                 </div>
-                                                <div class="icon">
-                                                  <i class="fa fa-gamepad"></i>
+                                                {% endfor %}
+
+                                                <div class="col-md-12">
+                                                  <button type="submit" class="btn btn-info">Crear Tarea</button>
                                                 </div>
-                                                <a id="modalActivate" type="button" class="small-box-footer" data-toggle="modal" data-target="#exampleModalPreview"> Jugar <i class="fas fa-arrow-circle-right"></i></a>
                                               </div>
-                                            </div>
-                                              <!-- PUZZLE -->
-                                            <div class="col-lg-3 col-6">
-                                              <div class="small-box bg-info">
-                                                <div class="inner">
-                                                  <h3>Juego</h3>
-                                                  <p>Puzzle Númerico</p>
-                                                </div>
-                                                <div class="icon">
-                                                  <i class="fa fa-gamepad"></i>
-                                                </div>
-                                                <a id="modalActivate" type="button" class="small-box-footer" data-toggle="modal" data-target="#exampleModalPreview2"> Jugar <i class="fas fa-arrow-circle-right"></i></a>
-                                              </div>
-                                            </div>
-                                             <!-- rompezabezas -->
-                                             <div class="col-lg-3 col-6">
-                                              <div class="small-box bg-info">
-                                                <div class="inner">
-                                                  <h3>Juego</h3>
-                                                  <p>Encuentra el Tesoro</p>
-                                                </div>
-                                                <div class="icon">
-                                                  <i class="fa fa-gamepad"></i>
-                                                </div>
-                                                <a id="modalActivate" type="button" class="small-box-footer" data-toggle="modal" data-target="#exampleModalPreview3"> Jugar <i class="fas fa-arrow-circle-right"></i></a>
-                                              </div>
-                                            </div>
-                                             <!-- Números -->
-                                             <div class="col-lg-3 col-6">
-                                              <div class="small-box bg-info">
-                                                <div class="inner">
-                                                  <h3>Juego</h3>
-                                                  <p>Come Números</p>
-                                                </div>
-                                                <div class="icon">
-                                                  <i class="fa fa-gamepad"></i>
-                                                </div>
-                                                <a id="modalActivate" type="button" class="small-box-footer" data-toggle="modal" data-target="#exampleModalPreview4"> Jugar <i class="fas fa-arrow-circle-right"></i></a>
-                                              </div>
-                                            </div>
-                                          </div>
+                                          </form>
                                         </div>
                                        
                                         
@@ -430,9 +455,294 @@
                                     </div>
                                     {% endif %}
                                     <!-- END DEBERES -->
+                                    
 
+                                   <!-- VER EDITAR NOTAS -->
+                                   {% if request.session.group.name != 'Estudiante'%}
+                                    
+                                   <div class="tab-pane" id="verDeberes">
+                                     <div class="card card-info">
+                                       
 
-                                    <!-- -->
+                                       <div class="card-header">
+                                         <h3 class="card-title"> DEBERES </h3>
+                                       </div>
+                                       <div class="card-body" style="display: block;">
+                                          <div class="container-fluid">
+                                            <table class="table table-bordered table-striped" id="data" width="100%">
+                                              <thead class="thead-info">
+                                                <tr>
+                                                  <th scope="col">#</th>
+                                                  <th scope="col">Tema</th>
+                                                  <th scope="col">Juego</th>
+                                                  <th scope="col">Estudiante</th>
+                                                  <th scope="col">Nota</th>
+                                                  <th scope="col">Opciones</th>
+
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                {% for l in tareas %}
+                                                <tr>
+                                                  
+                                                  <th scope="row"> {{ forloop.counter }} </th>
+                                                  <td> {{ l.tarea.name }} </td>
+                                                  <td class="text-center">
+                                                    <a href="{{ l.tarea.juego.url }}" target="_blank">
+                                                      <i class="fa fa-gamepad nav-icon"></i>
+                                                    </a>
+                                                  </td>
+                                                  <td> {{ l.estudiante.user.first_name }} {{ l.estudiante.user.last_name }}</td>
+                                                  <td> {{ l.nota }} </td>
+                                                  <td>
+                                                    <div class="dropdown text-center">
+                                                      <button
+                                                        class="btn btn-secondary dropdown-toggle"
+                                                        type="button"
+                                                        id="dropdownMenu2"
+                                                        data-toggle="dropdown"
+                                                        aria-haspopup="true"
+                                                        aria-expanded="false"
+                                                      >
+                                                        Opciones
+                                                      </button>
+                                                      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                        <a
+                                                          id="modalActivate" type="button"
+                                                          data-toggle="modal" data-target="#exampleModalPreview-{{l.id}} "
+                                                          data-toggle="tooltip"
+                                                          title="Editar registro"
+                                                          class="dropdown-item"
+                                                        >
+                                                          <i class="fas fa-edit"> Cambiar Nota</i>
+                                                        </a>
+                                                      </div>
+                                                    </div>
+                                                  </td>
+                                                </tr>
+                                                <!-- Modal Juego de Memoria -->
+                                                <div class="modal fade right" id="exampleModalPreview-{{l.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+                                                  <div class="modal-dialog modal-dialog momodel modal-fluid" role="document">
+                                                      <div class="modal-content modal-content ">
+                                                          <div class=" modal-header   modal-header text-center">
+                                                              <h5 class="modal-title w-100" id="exampleModalPreviewLabel"> Nota del estudiante  : {{ l.estudiante.user.first_name }} {{ l.estudiante.user.last_name }} </h5>
+                                                              <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                                                                  <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
+                                                              </button>
+                                                          </div>
+                                                          <form class="form" method="post" enctype="multipart/form-data" id="frmCambiarNota"
+                                   data-url="{{ list_url }}">
+                                                         <input type="hidden" name="id_tarea" id="id_tarea" value="{{ l.tarea_id }}">
+
+                                                          <div class="modal-body">
+                                                            {% csrf_token %}
+                                                            <div class="row">
+                                                              {% for field in tareaForm.visible_fields %}
+                                                  
+                                                              <div class="col-md-12">
+                                                                
+                                                                <div class="form-group">
+                                                                        {{ field|add_class:'form-control select2'|attr:'autocomplete:off' }}
+                                                                    </div>
+                                                              </div>
+                                                              {% endfor %}
+                                                          </div>
+                                                          <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-success">Aceptar</button>
+                                                        </div>
+                                                </form>
+
+                                                          
+                                                      </div>
+                                                  </div>
+                                                </div>
+
+                                                {% endfor %}
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                       </div>
+                                       <div class="card-footer">
+                                         
+                                       </div>
+
+                                     </div>
+                                   </div>
+                                   {% endif %}
+                                   <!-- END EDITAR NOTAS -->
+
+                                  <!-- VER REPORTES -->
+                                  {% if request.session.group.name != 'Estudiante'%}
+
+                                  <div class="tab-pane" id="veReportes">
+                                    <div class="card card-info">
+                                      
+                                      <div class="card-header">
+                                        <h3 class="card-title"> REPORTES </h3>
+                                      </div>
+                                      <div class="card-body" style="display: block;">
+                                        <div class="container-fluid">
+                                          <table class="table table-bordered table-striped" id="data" width="100%">
+                                            <thead class="thead-info">
+                                              <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Tema</th>
+                                                <th scope="col">Juego</th>
+                                                <th scope="col">Estudiante</th>
+                                                <th scope="col">Nota</th>
+
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {% for l in tareas %}
+                                              <tr>
+                                                
+                                                <th scope="row"> {{ forloop.counter }} </th>
+                                                <td> {{ l.tarea.name }} </td>
+                                                <td class="text-center">
+                                                  <a href="{{ l.tarea.juego.url }}" target="_blank">
+                                                    <i class="fa fa-gamepad nav-icon"></i>
+                                                  </a>
+                                                </td>
+                                                <td> {{ l.estudiante.user.first_name }} {{ l.estudiante.user.last_name }}</td>
+                                                <td> {{ l.nota }} </td>
+                                          
+                                              </tr>
+                                              <!-- Modal Juego de Memoria -->
+                                              <div class="modal fade right" id="exampleModalPreview-{{l.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog momodel modal-fluid" role="document">
+                                                    <div class="modal-content modal-content ">
+                                                        <div class=" modal-header   modal-header text-center">
+                                                            <h5 class="modal-title w-100" id="exampleModalPreviewLabel"> Nota del estudiante  : {{ l.estudiante.user.first_name }} {{ l.estudiante.user.last_name }} </h5>
+                                                            <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                                                                <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form class="form" method="post" enctype="multipart/form-data" id="frmCambiarNota"
+                                 data-url="{{ list_url }}">
+                                                       <input type="hidden" name="id_tarea" id="id_tarea" value="{{ l.tarea_id }}">
+
+                                                        <div class="modal-body">
+                                                          {% csrf_token %}
+                                                          <div class="row">
+                                                            {% for field in tareaForm.visible_fields %}
+                                                
+                                                            <div class="col-md-12">
+                                                              
+                                                              <div class="form-group">
+                                                                      {{ field|add_class:'form-control select2'|attr:'autocomplete:off' }}
+                                                                  </div>
+                                                            </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                                          <button type="submit" class="btn btn-success">Aceptar</button>
+                                                      </div>
+                                              </form>
+
+                                                        
+                                                    </div>
+                                                </div>
+                                              </div>
+
+                                              {% endfor %}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                                      <div class="card-footer">
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {% endif %}
+                                  <!-- END VER REPORTES -->
+
+                                  <!-- VER REPORTES INDIVIDUALES -->
+                                  {% if request.session.group.name == 'Estudiante'%}
+
+                                  <div class="tab-pane" id="veReportesIndividuales">
+                                    <div class="card card-info">
+                                      
+                                      <div class="card-header">
+                                        <h3 class="card-title"> REPORTES </h3>
+                                      </div>
+                                      <div class="card-body" style="display: block;">
+                                        <div class="container-fluid">
+                                          <table class="table table-bordered table-striped" id="data" width="100%">
+                                            <thead class="thead-info">
+                                              <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Tema</th>
+                                                <th scope="col">Juego</th>
+                                                <th scope="col">Nota</th>
+
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {% for l in tareasIndividual %}
+                                              <tr>
+                                                
+                                                <th scope="row"> {{ forloop.counter }} </th>
+                                                <td> {{ l.tarea.name }} </td>
+                                                <td class="text-center">
+                                                  <a href="{{ l.tarea.juego.url }}" target="_blank">
+                                                    <i class="fa fa-gamepad nav-icon"></i>
+                                                  </a>
+                                                </td>
+                                                <td> {{ l.nota }} </td>
+                                          
+                                              </tr>
+                                              <!-- Modal Juego de Memoria -->
+                                              <div class="modal fade right" id="exampleModalPreview-{{l.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog momodel modal-fluid" role="document">
+                                                    <div class="modal-content modal-content ">
+                                                        <div class=" modal-header   modal-header text-center">
+                                                            <h5 class="modal-title w-100" id="exampleModalPreviewLabel"> Nota del estudiante  : {{ l.estudiante.user.first_name }} {{ l.estudiante.user.last_name }} </h5>
+                                                            <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                                                                <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form class="form" method="post" enctype="multipart/form-data" id="frmCambiarNota"
+                                 data-url="{{ list_url }}">
+                                                       <input type="hidden" name="id_tarea" id="id_tarea" value="{{ l.tarea_id }}">
+
+                                                        <div class="modal-body">
+                                                          {% csrf_token %}
+                                                          <div class="row">
+                                                            {% for field in tareaForm.visible_fields %}
+                                                
+                                                            <div class="col-md-12">
+                                                              
+                                                              <div class="form-group">
+                                                                      {{ field|add_class:'form-control select2'|attr:'autocomplete:off' }}
+                                                                  </div>
+                                                            </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                                          <button type="submit" class="btn btn-success">Aceptar</button>
+                                                      </div>
+                                              </form>
+
+                                                        
+                                                    </div>
+                                                </div>
+                                              </div>
+
+                                              {% endfor %}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                                      <div class="card-footer">
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {% endif %}
+                                  <!-- END VER REPORTES INDIVIDUALES -->
                                   </div>  
                                 </div>
                                     </div>
@@ -444,435 +754,6 @@
                               <!-- /.card -->
     </div>
     
-    
-<!-- Modal Juego de Memoria -->
-<div class="modal fade right" id="exampleModalPreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
-  <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
-      <div class="modal-content-full-width modal-content ">
-          <div class=" modal-header-full-width   modal-header text-center">
-              <h5 class="modal-title w-100" id="exampleModalPreviewLabel">Juego del Rompecabezas</h5>
-              <button type="button" class="close " data-dismiss="modal" aria-label="Close">
-                  <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <div class="home divJuego1 bodyJuego1">
-                <div class="container divJuego1 bodyJuego1" style="margin-top:8%">
-            
-                    <style>
-                        :root {
-                            --w: calc(70vw / 6);
-                            --h: calc(70vh / 4);
-                        }
-
-                        * {
-                            transition: all 0.5s;
-                        }
-
-                        .bodyJuego1 {
-                            padding: 0;
-                            margin: 0;
-                            background: powderblue;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            text-align: center;
-                            font-family: calibri;
-                        }
-
-                        .divJuego1 {
-                            display: inline-block;
-                        }
-
-                        .area-tarjeta,
-                        .tarjeta,
-                        .cara {
-                          width: var(--w);
-                          cursor: pointer;
-                            min-width: 100px;
-                            height: var(--h);
-                        }
-
-                        .tarjeta {
-                            position: relative;
-                            transform-style: preserve-3d;
-                            animation: iniciar 5s;
-                        }
-
-                        .cara {
-                            position: absolute;
-                            backface-visibility: hidden;
-                            box-shadow: inset 0 0 0 5px white;
-                            font-size: 500%;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-
-                        .trasera {
-                            background-color: lightcyan;
-                            transform: rotateY(180deg);
-                        }
-
-                        .superior {
-                            background: linear-gradient(orange, darkorange);
-                        }
-
-                        .nuevo-juego {
-                            cursor: pointer;
-                            background: linear-gradient(orange, darkorange);
-                            padding: 20px;
-                            border-radius: 50px;
-                            border: white 5px solid;
-                            font-size: 130%;
-                        }
-
-                        @keyframes iniciar {
-
-                            20%,
-                            90% {
-                                transform: rotateY(180deg);
-                            }
-
-                            0%,
-                            100% {
-                                transform: rotateY(0deg);
-                            }
-                        }
-                    </style>
-                    <div class="container ">
-                      <div id="tablero" class="divJuego1 bodyJuego1">
-                      </div>
-  
-                      <br>
-  
-                      <div class="nuevo-juego divJuego1 bodyJuego1" onclick="generarTablero()">
-                          Nuevo Juego
-                      </div>
-                    </div>
-                    
-                        <!-- parte lógica -->
-                    <script>
-
-                      let iconos = []
-                      let selecciones = []
-
-                      generarTablero()
-
-                      function cargarIconos() {
-                          iconos = [
-                              '<i class="fas fa-star"></i>',
-                              '<i class="far fa-star"></i>',
-                              '<i class="fas fa-star-of-life"></i>',
-                          ]
-                      }
-
-                      function generarTablero() {
-                          cargarIconos()
-                          selecciones = []
-                          let tablero = document.getElementById("tablero")
-                          let tarjetas = []
-                          for (let i = 0; i < 6; i++) {
-                              tarjetas.push(`
-                              <div class="area-tarjeta divJuego1 bodyJuego1" onclick="seleccionarTarjeta(${i})">
-                                  <div class="tarjeta divJuego1 bodyJuego1" id="tarjeta${i}">
-                                      <div class="cara trasera divJuego1 bodyJuego1" id="trasera${i}">
-                                          ${iconos[0]}
-                                      </div>
-                                      <div class="cara superior divJuego1 bodyJuego1">
-                                          <i class="far fa-question-circle"></i>
-                                      </div>
-                                  </div>
-                              </div>        
-                              `)
-                              if (i % 2 == 1) {
-                                  iconos.splice(0, 1)
-                                  console.log("ganaste...")
-                                  
-                              }
-                          }
-                          tarjetas.sort(() => Math.random() - 0.5)
-                          tablero.innerHTML = tarjetas.join(" ")
-                      }
-
-                      function seleccionarTarjeta(i) {
-                          let tarjeta = document.getElementById("tarjeta" + i)
-                          if (tarjeta.style.transform != "rotateY(180deg)") {
-                              tarjeta.style.transform = "rotateY(180deg)"
-                              selecciones.push(i)
-                          }
-                          if (selecciones.length == 2) {
-                              deseleccionar(selecciones)
-                              selecciones = []
-                          }
-                      }
-
-                      function deseleccionar(selecciones) {
-                          setTimeout(() => {
-                              let trasera1 = document.getElementById("trasera" + selecciones[0])
-                              let trasera2 = document.getElementById("trasera" + selecciones[1])
-                              if (trasera1.innerHTML != trasera2.innerHTML) {
-                                  let tarjeta1 = document.getElementById("tarjeta" + selecciones[0])
-                                  let tarjeta2 = document.getElementById("tarjeta" + selecciones[1])
-                                  tarjeta1.style.transform = "rotateY(0deg)"
-                                  tarjeta2.style.transform = "rotateY(0deg)"
-                              }else{
-                                  trasera1.style.background = "plum"
-                                  trasera2.style.background = "plum"
-                              }
-                          }, 1000);
-                      }
-
-                    </script>
-
-                </div>
-            	</div>
-          </div>
-          <div class="modal-footer-full-width  modal-footer">
-              <button type="button" class="btn btn-danger btn-md btn-rounded" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary btn-md btn-rounded">Save changes</button>
-          </div>
-      </div>
-  </div>
-</div>
-
-
-<!-- Modal Juego del Puzzle -->
-<div class="modal fade right" id="exampleModalPreview2" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
-  <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
-      <div class="modal-content-full-width modal-content ">
-          <div class=" modal-header-full-width   modal-header text-center">
-              <h5 class="modal-title w-100" id="exampleModalPreviewLabel2">Puzzle Númerico</h5>
-              <button type="button" class="close " data-dismiss="modal" aria-label="Close">
-                  <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-            <style>
-              .game {
-                /* position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%); */
-                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-                padding: 15px;
-                background-color: #AA3939;
-                border-radius: 5px;
-              }
-
-              .grid {
-                display: grid;
-                grid-template-columns: 80px 80px 80px 80px;
-                grid-template-rows: 80px 80px 80px 80px;
-                border: 1px solid #550000;
-              }
-
-              .grid button {
-                background-color: #cfcfcf;
-                color: #003333;
-                font-size: 24px;
-                font-weight: bold;
-                border: 1px solid #550000;
-                outline: none;
-                cursor: pointer;
-              }
-
-              .footer {
-                margin-top: 15px;
-                display: flex;
-                justify-content: space-between;
-              }
-
-              .footer button {
-                border: none;
-                font-size: 20px;
-                font-weight: bold;
-                border-radius: 5px;
-                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-                padding: 5px;
-                width: 80px;
-                background-color: #D4EE9F;
-                color: #003333;
-                outline: none;
-                cursor: pointer;
-              }
-
-              .footer button:hover {
-                color: #D4EE9F;
-                background-color: #003333;
-              }
-
-              .footer span {
-                flex: 1;
-                text-align: center;
-                font-size: 20px;
-                color: #D4EE9F;
-                font-weight: bold;
-                margin: auto 0;
-              }
-
-              .message {
-                color:#AA3939;
-                height: 80px;
-              }
-            </style>
-            
-            
-            <div class="game">
-              <div class="grid">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-                <button>6</button>
-                <button>7</button>
-                <button>8</button>
-                <button>9</button>
-                <button>10</button>
-                <button>11</button>
-                <button>12</button>
-                <button>13</button>
-                <button>14</button>
-                <button>15</button>
-                <button></button>
-              </div>
-        
-              <div class="footer">
-                <button>Play</button>
-                <span id="move">Move: 100</span>
-                <span id="time">Time: 100</span>
-              </div>
-            </div>
-            <h1 class="message">Ganaste!</h1>
-        
-    <script src="{% static 'matricula/js/puzzle.js' %}"></script>
-        
-          </div>
-          <div class="modal-footer-full-width  modal-footer">
-              <button type="button" class="btn btn-danger btn-md btn-rounded" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary btn-md btn-rounded">Save changes</button>
-          </div>
-      </div>
-  </div>
-</div>
-
-<!-- Modal Juego del Encuentra el tesoro -->
-<div class="modal fade right" id="exampleModalPreview3" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
-  <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
-      <div class="modal-content-full-width modal-content ">
-          <div class=" modal-header-full-width   modal-header text-center">
-              <h5 class="modal-title w-100" id="exampleModalPreviewLabel3">Encuentra el Tesoro</h5>
-              <button type="button" class="close " data-dismiss="modal" aria-label="Close">
-                  <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="card">
-                    <div class="card-body text-center">
-                      <style>
-
-                        .img1 {
-                          -webkit-user-select: none;
-                          -khtml-user-select: none;
-                          -moz-user-select: none;
-                          -o-user-select: none;
-                          user-select: none;
-                        }
-
-                        .p1 {
-                          display: block;
-                        }
-
-                      </style>
-                      <img src="{% static 'matricula/img/treasuremap.png' %}" class="img1 img-fluid" width="400" height="400" id="map" draggable="false">
-
-                      <p id="distance" class="p1"></p>
-
-                      <script src="{% static 'matricula/js/helper.js' %}" charset="utf-8"></script>
-                      <script src="{% static 'matricula/js/game.js' %}" charset="utf-8"></script>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-          <div class="modal-footer-full-width  modal-footer">
-              <button type="button" class="btn btn-danger btn-md btn-rounded" data-dismiss="modal">Close</button>
-          </div>
-      </div>
-  </div>
-</div>
-
-
-<!-- Modal Juego del número -->
-<div class="modal fade right" id="exampleModalPreview4" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
-  <div class="modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
-      <div class="modal-content-full-width modal-content ">
-          <div class=" modal-header-full-width   modal-header text-center">
-              <h5 class="modal-title w-100" id="exampleModalPreviewLabel4">Come Números</h5>
-              <button type="button" class="close " data-dismiss="modal" aria-label="Close">
-                  <span style="font-size: 1.3em;" aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <div class="col-sm-12">
-                  
-                      <style>
-                        .global {
-                            margin: 0;
-                            padding: 0; 
-                            box-sizing: border-box;
-                        }
-                        .bodyN {
-                            width: 100%;
-                            height: 100%;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            background: linear-gradient(to bottom, lightblue, darkblue);
-                        }
-
-                        #canvas1 {
-                            width: 100%;
-                            height: 100%;
-                            border: 4px solid black;
-                            background: linear-gradient(to bottom, lightblue, darkblue);
-                        }
-
-                        
-                      </style>
-                      <div class="container">
-
-                        <div class="">
-                          <container>
-                            <canvas id="canvas1"></canvas>
-                  
-                          </container>
-                         
-                        </div>
-                      </div>
-
-                      <script src="{% static 'matricula/js/juegofinal.js' %}"></script>
-                    
-                </div>
-              </div>
-
-            </div>
-          </div>
-          <div class="modal-footer-full-width  modal-footer">
-              <button type="button" class="btn btn-danger btn-md btn-rounded" data-dismiss="modal">Close</button>
-          </div>
-      </div>
-  </div>
-</div>
 
         {% block box_footer_after %}{% endblock %}
     {% block javascript_list %}

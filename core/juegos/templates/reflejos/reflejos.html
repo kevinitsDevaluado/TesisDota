@@ -1,0 +1,62 @@
+{% extends 'mainpage/index.html' %}
+
+{% load static %}
+{% block head_body %}
+    <link rel="stylesheet" type="text/css" href="{% static 'reflejos/css/style.css' %}">
+    
+    <!--Block head list-->
+    {% block head_list %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+    <div class="card {{ dshboard.card }}">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-search"></i>
+                {{ title }}
+            </h3>
+            <div class="card-tools">
+                <small>Su último acceso al sistema fue el {{ request.user.last_login }}</small>
+            </div>
+        </div>
+        <div class="card-body" style="display: block;">
+            <div class="container-fluid">
+                <!--Block content list-->
+                {% block content_list %}
+                    <!--Block content list before-->
+                    {% block content_list_before %}
+                        <br>
+                    {% endblock %}
+                    <!--Table-->      
+                    <div class="container">
+                        <h1>Comprueba tus reflejos!</h1>
+                        <h2>Haz click en los círculos y rectángulos tan rápido como puedas!</h2>
+                        <p class="bold">Tiempo de reacción: <span id="tiempoReaccion"></span></p>
+                    
+                        <div id="forma" class="container-fluid">
+                        </div>
+
+                        <script type="text/javascript" src="{% static 'reflejos/scripts/script.js' %}"></script>
+                    </div>
+                        
+
+                {% endblock %}
+            </div>
+        </div>
+        <!--Block box footer-->
+        {% block box_footer %}
+           
+        {% endblock %}
+        <!--Block box footer after-->
+        {% block box_footer_after %}{% endblock %}
+    </div>
+    {% block javascript_list %}
+
+        <script type="application/javascript">
+           
+        </script>
+    {% endblock %}
+
+{% include 'mainpage/footer.html' %}
+
+{% endblock %}

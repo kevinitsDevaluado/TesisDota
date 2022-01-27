@@ -18,8 +18,10 @@ class CursosListView(PermissionMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        curos = Cursos.objects.filter(profesor__id = self.request.user.id)
         context['create_url'] = reverse_lazy('cursos_create')
         context['title'] = 'Listado de Cursos'
+        context['object_list'] = curos
         return context
 
 

@@ -57,9 +57,10 @@
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="d-flex align-items-center">
         <div class="container">
-            <h1 style="color:#ffca00">{{ mainpage.name }}</h1>
-            <h2 style="color:#0eb8dd">La guardería en {{ mainpage.name }} es perfecta <br>  
-                para sus hijos. Tenemos más de 20 años <br> de experiencia.</h2>
+       
+            <h2 style="color:#000000">Aprender es divertido en el<br>
+                Centro Infantil {{ mainpage.name }}<br> es perfecta 
+                para sus hijos. <br>  Tenemos más de 20 años <br> de experiencia.</h2>
         </div>
     </section>
     <!-- End Hero -->
@@ -119,19 +120,19 @@
 
                         <div class="icon-box">
                             <div class="icon"><i class="bx bx-fingerprint"></i></div>
-                            <h4 class="title"><a href="">Misión</a></h4>
+                            <h4 class="title"><a href="">Proyecto Educativo</a></h4>
                             <p class="description">{{ mainpage.mission }}</p>
                         </div>
 
                         <div class="icon-box">
                             <div class="icon"><i class="bx bx-gift"></i></div>
-                            <h4 class="title"><a href="">Visión</a></h4>
+                            <h4 class="title"><a href="">Metodo Educativo</a></h4>
                             <p class="description">{{ mainpage.vision }}</p>
                         </div>
 
                         <div class="icon-box">
                             <div class="icon"><i class="bx bx-atom"></i></div>
-                            <h4 class="title"><a href="">Quienes somos</a></h4>
+                            <h4 class="title"><a href="">Evaluación</a></h4>
                             <p class="description">{{ mainpage.about_us }}</p>
                         </div>
 
@@ -157,6 +158,77 @@
                 </div>
             </div>
         </section><!-- End Counts Section -->
+
+
+ <!-- ======= Juegos Section ======= -->
+ <section id="juegos" class="juegos">
+    <div class="container">
+
+        <div class="section-title">
+            <h2 style="color:#ffca00">Juegos</h2>
+            <p></p>
+        </div>
+
+        <div class="row">
+           <div class="card">
+               <div class="card-body">
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <a href=" {% url 'juegomemoria' %} ">
+                            <h4 class="text-center">Juego de Memoría</h4>
+                            <img class="img-fluid" src="{% static 'mainpage/img/headset-collection-homepage-image-block-01-en-25oct21.jpeg' %}" alt="First slide">
+                        </a>
+                      </div>
+                      <div class="carousel-item">
+                        <a href=" {% url 'encuentraTesoro' %} ">
+                            <h4 class="text-center">Juego de Encuentra el Tesoro</h4>
+                            <img class="img-fluid" src="{% static 'mainpage/img/headset-collection-homepage-image-block-01-en-25oct21.jpeg' %}" alt="First slide">
+                        </a>
+                      </div>
+                      <div class="carousel-item">
+                        <a href=" {% url 'paint' %} ">
+                            <h4 class="text-center">Juego de Paint</h4>
+                            <img class="img-fluid" src="{% static 'mainpage/img/headset-collection-homepage-image-block-01-en-25oct21.jpeg' %}" alt="First slide">
+                        </a>
+                      </div>
+                      <div class="carousel-item">
+                        <a href=" {% url 'rompecabezas' %} ">
+                            <h4 class="text-center">Juego de Rompecabezas</h4>
+                            <img class="img-fluid" src="{% static 'mainpage/img/headset-collection-homepage-image-block-01-en-25oct21.jpeg' %}" alt="First slide">
+                        </a>
+                      </div>
+                      <div class="carousel-item">
+                        <a href=" {% url 'reflejos' %} ">
+                            <h4 class="text-center">Juego de Reflejos</h4>
+                            <img class="img-fluid" src="{% static 'mainpage/img/headset-collection-homepage-image-block-01-en-25oct21.jpeg' %}" alt="First slide">
+                        </a>
+                      </div>
+
+                      <div class="carousel-item">
+                        <a href=" {% url 'sentidos' %} ">
+                            <h4 class="text-center">Juego de Sentidos</h4>
+                            <img class="img-fluid" src="{% static 'mainpage/img/headset-collection-homepage-image-block-01-en-25oct21.jpeg' %}" alt="First slide">
+                        </a>
+                      </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
+               </div>
+
+           </div>
+        </div>
+
+    </div>
+</section><!-- End JUegos Section -->
+
 
         <!-- ======= Services Section ======= -->
         <section id="services" class="services">
@@ -232,7 +304,7 @@
             <div class="container">
 
                 <div class="section-title">
-                    <h2 style="color:#ffca00">Docentes</h2>
+                    <h2 style="color:#ffca00">Educadoras</h2>
                     <p></p>
                 </div>
 

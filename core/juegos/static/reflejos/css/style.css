@@ -1,0 +1,12 @@
+#forma {
+    width: 200px; 
+    height: 200px; 
+    background-color: #428bca;
+    position: relative;
+    top: 100px;
+    left: 100px;
+}
+
+.bold{
+    font-weight: bold;
+}

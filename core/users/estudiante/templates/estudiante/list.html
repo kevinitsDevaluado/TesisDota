@@ -6,7 +6,6 @@
     <th>Correo Electrónico Estudiante</th>
     <th>Representante</th>
     <th>Correo Electrónico Representante</th>
-    <th class="text-center">Opciones</th>
 {% endblock %}
 
 {% block rows %}
@@ -17,7 +16,6 @@
             <td>{{ i.user.email }}</td>
             <td>{{ i.representante.last_name }} {{ i.representante.first_name }}</td>
             <td>{{ i.representante.email }}</td>
-            <td>{{ i.user.id }}</td>
 
         </tr>
     {% endfor %}

@@ -1,0 +1,38 @@
+{% extends 'list.html' %} {% block columns %}
+<th>Nro</th>
+<th>Nombre</th>
+<th>Descripción</th>
+<th class="text-center">Opciones</th>
+{% endblock %} {% block rows %} {% for i in object_list %}
+<tr>
+  <td>{{ i.id }}</td>
+  <td>{{ i.name }}</td>
+  <td>{{ i.description }}</td>
+  <td>
+    <div class="dropdown text-center">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="dropdownMenu2"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Opciones
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <a
+          href="{% url 'juego_update' i.id %}"
+          data-toggle="tooltip"
+          title="Editar registro"
+          class="dropdown-item"
+        >
+          <i class="fas fa-edit"> Editar</i>
+        </a>
+
+        
+      </div>
+    </div>
+  </td>
+</tr>
+{% endfor %} {% endblock %}

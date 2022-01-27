@@ -1,0 +1,60 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Juego de Rompecabezas</title>
+    <link rel="stylesheet" href="{% static 'rompecabezas/css/juego.css' %}">
+
+  </head>
+  <body>
+    <div class="col-40">
+
+        <div id="titulo">
+            <h1>Rompecabezas</h1>
+            <h2>Jefe Gorgory</h2>
+        </div>
+        <div id="instrucciones">
+            <ul id="lista-instrucciones">
+            </ul>
+        </div>
+        <div id="objetivo">
+            <div class="texto-centrado">
+            <h3>Objetivo</h3>
+            <img src="{% static 'rompecabezas/images/final.jpg' %}" alt="Resultado final">
+            </div>
+        </div>
+        <div id="ultimo-mov">
+            <div id="flecha3" class="texto-centrado">
+            
+            </div>
+            <div id="flecha2" class="texto-centrado">
+            
+            </div>
+            <div id="flecha" class="texto-centrado">
+            
+            </div>
+        </div>
+        
+        </div>
+        <div class="col-60">
+        <div id="juego">
+            <div id="pieza1" class="piezas"><img src="{% static 'rompecabezas/images/100.jpg' %}" alt="Pieza n°1"></div>
+            <div id="pieza2" class="piezas"><img src="{% static 'rompecabezas/images/200.jpg' %}" alt="Pieza n°2"></div>
+            <div id="pieza3" class="piezas"><img src="{% static 'rompecabezas/images/300.jpg' %}" alt="Pieza n°3"></div>
+            <div id="pieza4" class="piezas"><img src="{% static 'rompecabezas/images/400.jpg' %}" alt="Pieza n°4"></div>
+            <div id="pieza5" class="piezas"><img src="{% static 'rompecabezas/images/500.jpg' %}" alt="Pieza n°5"></div>
+            <div id="pieza6" class="piezas"><img src="{% static 'rompecabezas/images/600.jpg' %}" alt="Pieza n°6"></div>
+            <div id="pieza7" class="piezas"><img src="{% static 'rompecabezas/images/700.jpg' %}" alt="Pieza n°7"></div>
+            <div id="pieza8" class="piezas"><img src="{% static 'rompecabezas/images/800.jpg' %}" alt="Pieza n°8"></div>
+            <div id="pieza9" class="piezas"></div>
+        </div>
+        </div>
+        <div id="footer" class="no_mostrar">
+        
+        </div>
+    <script src="{% static 'rompecabezas/js/juego.js' %}"></script>
+
+  </body>
+</html>

@@ -25,14 +25,16 @@
         Opciones
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        <a
-          href="{% url 'cursos_update' i.id %}"
-          data-toggle="tooltip"
-          title="Editar registro"
-          class="dropdown-item"
-        >
-          <i class="fas fa-edit"> Editar</i>
-        </a>
+        {% if request.session.group.name != 'Estudiante'%}
+          <a
+            href="{% url 'cursos_update' i.id %}"
+            data-toggle="tooltip"
+            title="Editar registro"
+            class="dropdown-item"
+          >
+            <i class="fas fa-edit"> Editar</i>
+          </a>
+        {% endif %}
 
         <a
           href="{% url 'verCurso' i.id %}"
