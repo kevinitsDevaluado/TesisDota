@@ -136,7 +136,6 @@ modules.xml
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -200,7 +199,6 @@ celerybeat-schedule.*
 # Environments
 .env
 .venv
-env/
 venv/
 ENV/
 env.bak/
