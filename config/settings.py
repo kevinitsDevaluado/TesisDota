@@ -54,8 +54,7 @@ LOCAL_APPS = [
     'core.users.representate',
     'core.matricula',
     'core.juegos',
-    'core.deberes',
-
+    'core.deberes',    
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS

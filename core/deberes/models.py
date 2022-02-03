@@ -34,6 +34,7 @@ class EntregarTarea(models.Model):
     tarea = models.ForeignKey(CrearTarea, on_delete=models.CASCADE, blank=True, null=True, default='', verbose_name='Tarea')
     nota = models.CharField(max_length=500, null=True, blank=True,choices=nota_choices, default=nota_choices[0][0])
     estudiante = models.ForeignKey(Estudiantes, on_delete=models.CASCADE, blank=True, null=True, default='', verbose_name='Estudiante')
+    creada_en = models.DateTimeField(auto_now=True,null=True, blank=True)
 
     def __str__(self):
         return self.tarea.id

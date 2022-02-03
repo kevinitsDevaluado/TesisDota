@@ -10,6 +10,7 @@ urlpatterns = [
     path('game/rompecabezas/', RompecabezasView.as_view(), name='rompecabezas'),
     path('game/reflejos/', ReflejosView.as_view(), name='reflejos'),
     path('game/sentidos/', SentidosView.as_view(), name='sentidos'),
+    path('game/juegonuevo/', JuegoNUevoView.as_view(), name='juegonuevo'),
 
 
     path('game/', JuegoListView.as_view(), name='juego_list'),

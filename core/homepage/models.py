@@ -90,6 +90,42 @@ class Services(models.Model):
         ordering = ['-id']
 
 
+
+
+class TareasEnviadas(models.Model):
+    name = models.CharField(max_length=150, verbose_name='Título')
+    desc = models.CharField(max_length=500, null=True, blank=True, verbose_name='Descripción')
+    image = models.ImageField(upload_to='services/%Y/%m/%d', verbose_name='Imagen', null=True, blank=True)
+    archivo = models.FileField(upload_to='informe/TareasEnviadas', blank=False, null=False)
+    state = models.BooleanField(default=True, verbose_name='Estado')
+
+    def __str__(self):
+        return self.name
+
+    def get_image(self):
+        if self.image:
+            return '{}{}'.format(settings.MEDIA_URL, self.image)
+        return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.png')
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['image'] = self.get_image()
+        return item
+
+    def delete(self, using=None, keep_parents=False):
+        try:
+            os.remove(self.image.path)
+        except:
+            pass
+        super(Services, self).delete()
+
+    class Meta:
+        verbose_name = 'Tareas Enviadas'
+        verbose_name_plural = 'Tareas Enviadas'
+        ordering = ['-id']
+
+
+
 class Departments(models.Model):
     name = models.CharField(max_length=150, verbose_name='Título')
     title = models.CharField(max_length=150, verbose_name='Subtítulo')

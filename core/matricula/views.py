@@ -111,10 +111,13 @@ class VerCursoListView(CreateView):
                     nota = request.POST['nota']
                     print('id tarea: ',nota)
                     tarea = request.POST['id_tarea']
+                    estudiante = request.POST['id_estudiante']
+                    print('estudiante_id', estudiante)
                     print('id tarea', tarea)
-                    km = EntregarTarea.objects.get(tarea = tarea)
+                    km = EntregarTarea.objects.get(tarea_id = tarea,estudiante_id = estudiante)
                     km.nota = nota
                     km.save()
+                   
                                                         
             elif action == 'validate_data':
                 return self.validate_data()
@@ -135,6 +138,7 @@ class VerCursoListView(CreateView):
         asistencias = ListaEstudiantes.objects.filter(curso=id_curso)
         tareas = EntregarTarea.objects.filter(tarea__curso=id_curso)
         tareasIndividual = EntregarTarea.objects.filter(tarea__curso=id_curso, estudiante__user__id = self.request.user.id)
+        asistenciasIndividuales = ListaEstudiantes.objects.filter(curso=id_curso, estudiant__user__id = self.request.user.id)
 
         #SELECT *FROM MATRICULA where id_curso = 1;
         #matriculados = Matricula.objects.filter(curso=id_curso)
@@ -160,6 +164,7 @@ class VerCursoListView(CreateView):
         context['formCrearTarea'] = CrearTareaForm()
         context['tareas'] = tareas
         context['tareasIndividual'] = tareasIndividual
+        context['asistenciaIndividual'] = asistenciasIndividuales
 
         context['tareaForm'] = TareaForm()
 

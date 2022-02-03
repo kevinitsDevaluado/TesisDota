@@ -44,6 +44,7 @@ class MainPageIndexView(TemplateView):
         context['gallery'] = Gallery.objects.filter(state=True).order_by('id')
         context['team'] = Team.objects.filter(state=True).order_by('id')
         context['qualities'] = Qualities.objects.filter(state=True).order_by('id')
+        context['tareas'] = TareasEnviadas.objects.filter(state=True).order_by('id')
         context['form'] = CommentsForm()
         context['onepage'] = True
         return context

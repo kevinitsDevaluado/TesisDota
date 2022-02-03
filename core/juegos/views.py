@@ -181,3 +181,12 @@ class SentidosView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Sentidos del CUerpo HUmano'
         return context
+
+
+class JuegoNUevoView(TemplateView):
+    template_name = 'rompecabezasnorte/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Sentidos del CUerpo HUmano'
+        return context

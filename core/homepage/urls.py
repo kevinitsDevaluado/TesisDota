@@ -12,6 +12,8 @@ from core.homepage.views.comments.views import *
 from core.homepage.views.qualities.views import *
 from core.homepage.views.news.views import *
 from core.homepage.views.videos.views import *
+from core.homepage.views.tareasDirigidas.views import *
+
 
 urlpatterns = [
     # mainpage
@@ -22,6 +24,11 @@ urlpatterns = [
     path('homepage/services/add/', ServicesCreateView.as_view(), name='services_create'),
     path('homepage/services/update/<int:pk>/', ServicesUpdateView.as_view(), name='services_update'),
     path('homepage/services/delete/<int:pk>/', ServicesDeleteView.as_view(), name='services_delete'),
+    # tareas dirigidas
+    path('homepage/homework/', TareasDirigidasListView.as_view(), name='tareasDirigidas_list'),
+    path('homepage/homework/add/', TareasDirigidasCreateView.as_view(), name='tareasDirigidas_create'),
+    path('homepage/homework/update/<int:pk>/', TareasDirigidasUpdateView.as_view(), name='tareasDirigidas_update'),
+    path('homepage/homework/delete/<int:pk>/', TareasDirigidasDeleteView.as_view(), name='tareasDirigidas_delete'),
     # departments
     path('homepage/departments/', DepartmentsListView.as_view(), name='departments_list'),
     path('homepage/departments/add/', DepartmentsCreateView.as_view(), name='departments_create'),

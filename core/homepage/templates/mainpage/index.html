@@ -254,6 +254,34 @@
             </div>
         </section><!-- End Services Section -->
 
+
+
+        <!-- ======= Tareas Enviadas ======= -->
+        <section id="services" class="services">
+            <div class="container">
+
+                <div class="section-title">
+                    <h2 style="color:#ffca00">Tareas Dirigidas</h2>
+                    <p></p>
+                </div>
+
+                <div class="row">
+                    {% for s in tareas %}
+                        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mb-3">
+                            <div class="icon-box">
+                                <img src="{{ s.get_image }}" class="img-fluid d-block mx-auto">
+                                <h4><a href=" {{ s.archivo.url }} " target="_blank">{{ s.name }}</a></h4>
+                                <p>{{ s.desc }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </section><!-- End Tareas Enviadas Section -->
+
+
+
         <!-- ======= Departments Section ======= -->
         <section id="departments" class="departments">
             <div class="container">

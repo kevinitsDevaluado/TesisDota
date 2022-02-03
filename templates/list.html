@@ -48,6 +48,8 @@
             </div>
         </div>
         <!--Block box footer-->
+        {% if request.session.group.name != 'Estudiante'%}
+
         {% block box_footer %}
             <div class="card-footer">
                 <!--Block box footer buttons-->
@@ -66,6 +68,8 @@
             </div>
         {% endblock %}
         <!--Block box footer after-->
+        {% endif %}
+
         {% block box_footer_after %}{% endblock %}
     </div>
     {% block javascript_list %}
